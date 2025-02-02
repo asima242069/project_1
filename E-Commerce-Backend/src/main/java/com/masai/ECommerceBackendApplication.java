@@ -20,7 +20,7 @@ public class ECommerceBackendApplication {
 	}
 	
 	@Bean
-	public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
+	public OpenAPI customOpenAPI(@Value("1.6.9") String appVersion) {
 	   return new OpenAPI()
 	    .components(new Components().addSecuritySchemes("basicScheme",
 	            new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))

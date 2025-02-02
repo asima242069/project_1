@@ -1,38 +1,30 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
-    container_name: spring_app
-    depends_on:
-      - db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ecommercedb
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SERVER_PORT=8009
-    ports:
-      - "8009:8009"
-    networks:
-      - app_network
-
-  db:
+  mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: ecommerce-mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ecommercedb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
     ports:
-      - "3306:3306"
-    networks:
-      - app_network
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
 
-networks:
-  app_network:
-    driver: bridge
+  app:
+    build:
+      context: .
+      dockerfile: E-Commerce-Backend/Dockerfile
+    container_name: ecommerce-app
+    depends_on:
+      - mysql
+    ports:
+      - "8009:8009"
 
 volumes:
   mysql_data:
